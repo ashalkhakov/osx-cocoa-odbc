@@ -72,9 +72,13 @@
         
         printf ("%s\n",self.loginModel.dsn.UTF8String);
         
-        printf ("%s\n",self.loginModel.username.UTF8String);
+        NSString *username = self.loginModel.username;
+        
+        printf ("%s\n", username ? username.UTF8String : "");
+        
+        NSString *password = self.loginModel.password;
     
-        printf ("%s\n",self.loginModel.password.UTF8String);
+        printf ("%s\n", password ? password.UTF8String : "");
     
         [app terminate : self];
         

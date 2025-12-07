@@ -13,10 +13,7 @@
 #import "OdbcException.h"
 #import "OdbcPrepareDescriptor.h"
 #import "OdbcParameterDescriptor.h"
-
-#import <iODBC/sql.h>
-#import <iODBC/sqlext.h>
-#import <iODBC/sqltypes.h>
+#import "OdbcDbSpecific.h"
 
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
@@ -24,7 +21,7 @@
 
 @property SQLHANDLE               hstmt;
 @property OdbcConnection        * connection;
-@property BOOL                    wasNull;
+@property bool                    wasNull;
 @property OdbcResultDescriptor  * resultDescriptor;
 @property OdbcPrepareDescriptor * prepareDescriptor;
 
@@ -287,7 +284,7 @@
     
     NSCalendar * gregorian = [[NSCalendar alloc] initWithCalendarIdentifier : NSGregorianCalendar];
     
-    //gregorian.timeZone = [NSTimeZone timeZoneForSecondsFromGMT : 0];
+    gregorian.timeZone = [NSTimeZone timeZoneForSecondsFromGMT : 0];
     
     NSDate * date = [gregorian dateFromComponents: dateComps];
     
@@ -379,6 +376,15 @@
             break;
         }
             
+        case SQL_SS_TIME2: {
+            
+            result = [self getTime : columnNumber];
+            
+            if (self.wasNull) return nil;
+            
+            break;
+        }
+                    
         default: {
             
             NSString * msg = [NSString stringWithFormat : @"Unsupported column type '%hd'",cd.dataType];
@@ -473,6 +479,19 @@
         
         RAISE_ODBC_HANDLE ("SQLCloseCursor",SQL_HANDLE_STMT,self.hstmt);
     }
+/*
+    // Reset/unbind parameter bindings so statement can be reused
+    rc = SQLFreeStmt(self.hstmt, SQL_RESET_PARAMS);
+
+    if (rc == SQL_INVALID_HANDLE) {
+
+        RAISE_INVALID_HANDLE("SQLFreeStmt(SQL_RESET_PARAMS)");
+
+    } else if (rc != SQL_SUCCESS) {
+
+        RAISE_ODBC_HANDLE("SQLFreeStmt(SQL_RESET_PARAMS)", SQL_HANDLE_STMT, self.hstmt);
+
+    }*/
 }
 
 - (OdbcPrepareDescriptor *) prepareDescriptor {

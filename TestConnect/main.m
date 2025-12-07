@@ -8,9 +8,9 @@
 
 #import <CoreFoundation/CoreFoundation.h>
 
-#import <iODBC/sql.h>
-#import <iODBC/sqltypes.h>
-#import <iODBC/sqlext.h>
+#include <sqltypes.h>
+#include <sql.h>
+#include <sqlext.h>
 
 #import "OdbcException.h"
 

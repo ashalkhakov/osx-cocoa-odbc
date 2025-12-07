@@ -12,7 +12,7 @@
 
 @interface OdbcColumnDescriptor : NSObject
 
-@property (readonly) OdbcStatement * statement;
+@property (weak, readonly) OdbcStatement * statement;
 @property (readonly) int             columnNumber;
 @property (readonly) NSString      * columnName;
 @property (readonly) short           dataType;

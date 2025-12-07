@@ -22,6 +22,8 @@ static NSString * OdbcScheme = @"odbc";
 
 @implementation OdbcUrl
 
+@synthesize password = _password;
+
 + (OdbcUrl *) urlWithUrl : (NSURL *) url {
     
     OdbcUrl * odbcUrl = [[OdbcUrl alloc] initWithUrl : url];

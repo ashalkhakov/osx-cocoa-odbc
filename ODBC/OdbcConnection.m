@@ -10,9 +10,9 @@
 #import "OdbcException.h"
 #import "OdbcStatement.h"
 
-#import <iODBC/sql.h>
-#import <iODBC/sqltypes.h>
-#import <iODBC/sqlext.h>
+#include <sqltypes.h>
+#include <sql.h>
+#include <sqlext.h>
 
 @interface OdbcConnection ()
     
@@ -170,13 +170,18 @@
         table = [table lowercaseString];
         
         tableTypes = [tableTypes lowercaseString];
+    } else if ([dbms hasPrefix: @"MariaDB"]) {
+        
+        schema = nil;
+
+        tableTypes = [tableTypes uppercaseString];
     }
 
     OdbcStatement * stmt = [self newStatement];
     
     rc = SQLTables (stmt.hstmt,
                     (SQLCHAR *)catalog.UTF8String,SQL_NTS,
-                    (SQLCHAR *)schema.UTF8String,SQL_NTS,
+                    (schema ? (SQLCHAR *)schema.UTF8String : NULL), (schema ? SQL_NTS : 0),
                     (SQLCHAR *)table.UTF8String,SQL_NTS,
                     (SQLCHAR *)tableTypes.UTF8String,SQL_NTS);
 
@@ -304,12 +309,12 @@
     
     SQLRETURN rc;
     
-    unsigned int autocommit = 0;
+    SQLUINTEGER autocommit = 0;
     
-    rc = SQLGetConnectAttr (self.hdbc,SQL_ATTR_AUTOCOMMIT,&autocommit,0,0);
+    rc = SQLGetConnectAttr (self.hdbc,SQL_ATTR_AUTOCOMMIT,&autocommit,sizeof(autocommit),NULL);
     
     CHECK_ERROR ("SQLGetConnectAttr",rc,SQL_HANDLE_DBC,self.hdbc);
-       
+
     return (autocommit == 0 ? NO : YES);
 
 }
@@ -318,9 +323,9 @@
     
     SQLRETURN rc;
     
-    unsigned long autoc = (autocommit ? SQL_AUTOCOMMIT_ON : SQL_AUTOCOMMIT_OFF);
+    SQLUINTEGER autoc = autocommit ? SQL_AUTOCOMMIT_ON : SQL_AUTOCOMMIT_OFF;
     
-    rc = SQLSetConnectAttr (self.hdbc,SQL_ATTR_AUTOCOMMIT,(void *)autoc,8);
+    rc = SQLSetConnectAttr (self.hdbc,SQL_ATTR_AUTOCOMMIT,(SQLPOINTER)(uintptr_t)autoc,0);
     
     CHECK_ERROR ("SQLSetConnectAttr",rc,SQL_HANDLE_DBC,self.hdbc);
 }
@@ -438,7 +443,7 @@
     }
     
     rc = SQLConnect (self.hdbc,(SQLCHAR *)serverc,serverLen,(SQLCHAR *)userc,userLen,(SQLCHAR *)passwordc,passLen);
-    
+
     CHECK_ERROR ("SQLConnect",rc,SQL_HANDLE_DBC,self.hdbc);
     
     self.connected = YES;

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>MySQL</key>
+	<dict>
+		<key>DataSourceName</key>
+		<string>MariaDBTest</string>
+		<key>Username</key>
+		<string>odbctestuser</string>
+		<key>Password</key>
+		<string>odbctestpassword</string>
+	</dict>
+	<key>MSSQL</key>
+	<dict>
+		<key>DataSourceName</key>
+		<string>MSSQLTest</string>
+		<key>Username</key>
+		<string>odbctestuser</string>
+		<key>Password</key>
+		<string>odbctestpassword</string>
+	</dict>
+	<key>PGSQL</key>
+	<dict>
+		<key>DataSourceName</key>
+		<string>PostgresTest</string>
+		<key>Username</key>
+		<string>odbctestuser</string>
+		<key>Password</key>
+		<string>odbctestpassword</string>
+	</dict>
+	<key>SQLite</key>
+	<dict>
+		<key>DataSourceName</key>
+		<string>SQLiteTest</string>
+		<key>Username</key>
+		<string></string>
+		<key>Password</key>
+		<string></string>
+	</dict>
+</dict>
+</plist>

@@ -11,8 +11,6 @@
 #import "OdbcParameterDescriptor.h"
 #import "OdbcException.h"
 
-#import <iODBC/sql.h>
-
 @interface OdbcPrepareDescriptor ()
 
 @property OdbcStatement * statement;

@@ -10,13 +10,9 @@
 #import "OdbcStatement.h"
 #import "OdbcException.h"
 
-#import <iODBC/sql.h>
-#import <iODBC/sqlext.h>
-#import <iODBC/sqltypes.h>
-
 @interface OdbcParameterDescriptor ()
 
-@property OdbcStatement * statement;
+@property(weak) OdbcStatement * statement;
 @property int             parameterNumber;
 @property short           dataType;
 @property unsigned long   parameterSize;
@@ -212,7 +208,7 @@
     
     NSCalendar * gregorian = [[NSCalendar alloc] initWithCalendarIdentifier : NSGregorianCalendar];
     
-    //gregorian.timeZone = [NSTimeZone timeZoneForSecondsFromGMT : 0];
+    gregorian.timeZone = [NSTimeZone timeZoneForSecondsFromGMT : 0];
     
     unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit  |  NSDayCalendarUnit |
                          NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;

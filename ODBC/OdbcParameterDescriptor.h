@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import <iODBC/sql.h>
-#import <iODBC/sqlext.h>
-#import <iODBC/sqltypes.h>
+#include <sqltypes.h>
+#include <sql.h>
+#include <sqlext.h>
 
 @class OdbcStatement;
 
@@ -41,7 +41,7 @@ typedef union parameter_value_def {
     SQLLEN          strLenOrInd;
 }
 
-@property (readonly)  OdbcStatement  * statement;
+@property (weak,readonly)  OdbcStatement  * statement;
 @property (readonly)  int              parameterNumber;
 @property (readonly)  short            dataType;
 @property (readonly)  unsigned long    parameterSize;

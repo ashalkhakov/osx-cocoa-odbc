@@ -30,12 +30,20 @@
     raiseOdbcExceptionWithSqlState ((__PRETTY_FUNCTION__),(function),(message),(sqlState)); \
 }
 
+#define LOG_ODBC_HANDLE(function,handleType,handle) {                         \
+                                                                              \
+    logOdbcHandle ((__PRETTY_FUNCTION__),(function),(handleType),(handle));   \
+}
 
 #define CHECK_ERROR(function,rc,handleType,handle) {                    \
                                                                         \
     if (rc == -2) {                                                     \
                                                                         \
         RAISE_INVALID_HANDLE (function);                                \
+                                                                        \
+    } else if (rc == 1) {                                               \
+                                                                        \
+        LOG_ODBC_HANDLE (function,handleType,handle);                   \
                                                                         \
     } else if (rc != 0) {                                               \
                                                                         \
@@ -46,6 +54,8 @@
 void raiseInvalidHandle (const char * method, const char * function);
 
 void raiseOdbcHandle (const char * method, const char * function, short handleType, void * handle);
+
+void logOdbcHandle (const char * method, const char * function, short handleType, void * handle);
 
 void raiseOdbcException (const char * method, const char * function, const char * message);
 
@@ -62,6 +72,11 @@ void raiseOdbcExceptionWithSqlState (const char * method, const char * function,
                 function : (const char *) function
               handleType : (short) handleType
                   handle : (void *) handle;
+
++ (void) logOdbcHandle : (const char *) method
+              function : (const char *) function
+            handleType : (short) handleType
+                handle : (void *) handle;
 
 + (void) raiseOdbcException : (const char *) method
                    function : (const char *) function

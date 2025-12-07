@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>OdbcDocument Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">ODBC </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">Datakonsulten AB</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/managedObjectContext">managedObjectContext</option>
+		
+		<option value="//api/name/managedObjectModel">managedObjectModel</option>
+		
+		<option value="//api/name/modelFileName">modelFileName</option>
+		
+		<option value="//api/name/persistentStoreClass">persistentStoreClass</option>
+		
+		<option value="//api/name/persistentStoreCoordinator">persistentStoreCoordinator</option>
+		
+		<option value="//api/name/persistentStoreType">persistentStoreType</option>
+		
+		<option value="//api/name/persistentStoreUrl">persistentStoreUrl</option>
+		
+		<option value="//api/name/productName">productName</option>
+		
+		<option value="//api/name/windowNibName">windowNibName</option>
+		
+	</optgroup>
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/predicateForEntity:">- predicateForEntity:</option>
+		
+		<option value="//api/name/reloadAction:">- reloadAction:</option>
+		
+		<option value="//api/name/saveAction:">- saveAction:</option>
+		
+		<option value="//api/name/windowWillReturnUndoManager:">- windowWillReturnUndoManager:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">OdbcDocument Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSPersistentDocument</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>OdbcDocument.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The OdbcDocument class is inteded to use instead of XCode generated NSPersistentDocument
+class when creating a Core Data document-based project.</p>
+
+<p>When creating a new application, uncheck &lsquo;Create Document-Based application and
+uncheck also 'Use Core Data&rsquo; check box. Then let your document inherit from
+OdbcDocument like this:</p>
+
+<pre><code>
+// MyDocument.h
+
+#import &lt;Cocoa/Cocoa.h&gt;
+#import &lt;Odbc/Odbc.h&gt;
+
+@interface MyDocument : OdbcDocument
+
+@end
+</code></pre>
+
+
+<p>In your now empty MyDocument.m implement following methods:</p>
+
+<pre><code>
+
+// MyDocument.m
+
+- (NSURL *) persistentStoreUrl {
+
+    return [NSURL URLWithString : @"odbc:&#47;//testdb?username=root&password=secret"];
+}
+
+- (NSString *) windowNibName {
+
+    return @"MyDocument"
+
+</code></pre>
+
+
+<p>This methods will be called by OdbcDocument to get ODBC database URL and name of
+document nib file.</p>
+
+<p>The URL shown above is only an example. You should replace &lsquo;testdb&rsquo; by your own ODBC
+data source name (DSN). You should replace &lsquo;root&rsquo; with your username and you
+should replace &lsquo;secrect&rsquo; by your own password.</p>
+
+<p>The class name &lsquo;MyDocument&rsquo; and nib name &lsquo;MyDocument&rsquo; shown above are also only an example.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						<a title="Methods to override" name="task_Methods to override"></a>
+						<h2 class="task-title">Methods to override</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/persistentStoreUrl" title="persistentStoreUrl"></a>
+	<h3 class="method-title"><code><a href="#//api/name/persistentStoreUrl">&nbsp;&nbsp;persistentStoreUrl</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This property returns ODBC URL. It should be overwriten by subclasses.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSURL *persistentStoreUrl</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>ODBC URL for ODBC database to use.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Returned URL should have following format:</p>
+
+<pre><code>
+odbc::&#47;//[data source name]/?username=[username]&password=[password]
+</code></pre>
+
+
+<p>where |data source name] is ODBC data source name, [username] is database username
+and [password] is users password.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">OdbcDocument.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/windowNibName" title="windowNibName"></a>
+	<h3 class="method-title"><code><a href="#//api/name/windowNibName">&nbsp;&nbsp;windowNibName</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This property shall return name of document nib file.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSString *windowNibName</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>document nib file name.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">OdbcDocument.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/modelFileName" title="modelFileName"></a>
+	<h3 class="method-title"><code><a href="#//api/name/modelFileName">&nbsp;&nbsp;modelFileName</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns model file name.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSString *modelFileName</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>NSString containing model file name without extension.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This property returns model file name without extension. Implement it if your
+model has other name than your application. Default implementation return name
+of your application.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">OdbcDocument.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/predicateForEntity:" title="predicateForEntity:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/predicateForEntity:">&ndash;&nbsp;predicateForEntity:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method shall return fetch predicate given entity.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSPredicate *)predicateForEntity:(NSEntityDescription *)<em>entity</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>entity</code></th>
+						<td><p>the entity to return a predicate for.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>NSPredicate or nil.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method shall be implemented by an application when application is using
+predicates to fetch data. The default implementation returna nil which means
+that no predicate is used.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">OdbcDocument.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Properties to bind to" name="task_Properties to bind to"></a>
+						<h2 class="task-title">Properties to bind to</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/managedObjectContext" title="managedObjectContext"></a>
+	<h3 class="method-title"><code><a href="#//api/name/managedObjectContext">&nbsp;&nbsp;managedObjectContext</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This is the property to bind to.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSManagedObjectContext *managedObjectContext</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Core Data NSManagedObjectContext for the document.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>If you use NSArrayController for data access then in its Attribute Inspector in
+XCode Interface Builder you should set it to entity mode and specify the entity
+name. Next in Bindings Inspector in Managed Object Context you should bind to
+your using managedObjectContext as Model Key Path.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">OdbcDocument.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Other properties" name="task_Other properties"></a>
+						<h2 class="task-title">Other properties</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/persistentStoreType" title="persistentStoreType"></a>
+	<h3 class="method-title"><code><a href="#//api/name/persistentStoreType">&nbsp;&nbsp;persistentStoreType</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This returns persistent store type as NSString.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSString *persistentStoreType</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>NSPersistentStoreType</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The default implementation returns @&ldquo;OdbcStore&rdquo;.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">OdbcDocument.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/persistentStoreClass" title="persistentStoreClass"></a>
+	<h3 class="method-title"><code><a href="#//api/name/persistentStoreClass">&nbsp;&nbsp;persistentStoreClass</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This returns persistent store class name as NSString.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSString *persistentStoreClass</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Persistent Store Class Name</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The default implementation returns @&ldquo;OdbcStore&rdquo;.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">OdbcDocument.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/managedObjectModel" title="managedObjectModel"></a>
+	<h3 class="method-title"><code><a href="#//api/name/managedObjectModel">&nbsp;&nbsp;managedObjectModel</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This returns Core Data NSManagedObjectModel for the document.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSManagedObjectModel *managedObjectModel</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>NSManagedObjectModel for the application</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">OdbcDocument.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/persistentStoreCoordinator" title="persistentStoreCoordinator"></a>
+	<h3 class="method-title"><code><a href="#//api/name/persistentStoreCoordinator">&nbsp;&nbsp;persistentStoreCoordinator</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This returns NSPersistentStoreCoordinator for the document.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Persistent Store Coordinator</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">OdbcDocument.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/productName" title="productName"></a>
+	<h3 class="method-title"><code><a href="#//api/name/productName">&nbsp;&nbsp;productName</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This returns application name as NSString.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSString *productName</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>application name</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">OdbcDocument.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Implemented actions" name="task_Implemented actions"></a>
+						<h2 class="task-title">Implemented actions</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/saveAction:" title="saveAction:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/saveAction:">&ndash;&nbsp;saveAction:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This action saves all changes to the database.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (IBAction)saveAction:(id)<em>sender</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sender</code></th>
+						<td><p>the sender of the message - can be nil</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">OdbcDocument.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/reloadAction:" title="reloadAction:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/reloadAction:">&ndash;&nbsp;reloadAction:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This action reloads data from the database.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (IBAction)reloadAction:(id)<em>sender</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sender</code></th>
+						<td><p>the sender of the message - can be nil</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">OdbcDocument.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Other methods" name="task_Other methods"></a>
+						<h2 class="task-title">Other methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/windowWillReturnUndoManager:" title="windowWillReturnUndoManager:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/windowWillReturnUndoManager:">&ndash;&nbsp;windowWillReturnUndoManager:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method returns undo manager for given window.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)<em>window</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>window</code></th>
+						<td><p>the window</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>undo manager</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">OdbcDocument.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2025 Datakonsulten AB. All rights reserved. Updated: 2025-12-07</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

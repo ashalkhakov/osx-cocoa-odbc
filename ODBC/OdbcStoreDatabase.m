@@ -11,9 +11,10 @@
 #import "OdbcPredicate.h"
 #import "Odbc.h"
 
-#import <iODBC/sql.h>
-#import <iODBC/sqltypes.h>
-#import <iODBC/sqlext.h>
+#include <sqltypes.h>
+#include <sql.h>
+#include <sqlucode.h>
+#include <sqlext.h>
 
 @interface OdbcStoreDatabase () {
     
@@ -188,7 +189,7 @@
     
         NSRelationshipDescription * selectedRelationship = relationship;
         
-        int cmp = [tableName compare : inverseTableName];
+        NSComparisonResult cmp = [tableName compare : inverseTableName];
     
         if (cmp < 0) {
             
@@ -924,8 +925,21 @@
     
     self->catalog = self->odbcConnection.currentCatalog;
     
-    self->schema = self->odbcConnection.currentSchema;
-    
+    // TODO: find a better way
+    if ([dbms hasPrefix : @"Microsoft SQL Server"]) {
+        
+        self->schema = @"dbo";
+        
+    } else if ([dbms hasPrefix: @"PostgreSQL"]) {
+        
+        self->schema = @"public";
+        
+    } else {
+        
+        self->schema = self->odbcConnection.currentSchema;
+        
+    }
+
     [self commit];
     
     [self createTablesIfRequired];
@@ -1027,6 +1041,11 @@
         [sql appendFormat : @"constraint %@ foreign key (%@) references %@ (id) on delete cascade,",
                             tableName,dstEntity.name,dstEntity.name];
         
+    } else if ([dbms hasPrefix: @"Microsoft SQL Server"]) {
+        
+        [sql appendFormat : @"constraint fk_%@ foreign key (%@) references %@ (id) on delete cascade on update no action,",
+                            tableName,dstEntity.name,dstEntity.name];
+
     } else {
     
         [sql appendFormat : @"constraint %@ foreign key (%@) references %@ (id) on delete cascade on update no action,",
@@ -1045,6 +1064,11 @@
         [sql appendFormat : @"constraint %@ foreign key (%@) references %@ (id) on delete cascade)" ,
                             inverseTableName,srcEntity.name,srcEntity.name];
         
+    } else if ([dbms hasPrefix: @"Microsoft SQL Server"]) {
+        
+        [sql appendFormat : @"constraint fk_%@ foreign key (%@) references %@ (id) on delete cascade on update no action)" ,
+                            inverseTableName,srcEntity.name,srcEntity.name];
+
     } else {
     
         [sql appendFormat : @"constraint %@ foreign key (%@) references %@ (id) on delete cascade on update no action)" ,

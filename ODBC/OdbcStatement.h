@@ -22,8 +22,8 @@
 }
 
 @property (readonly)  void           * hstmt;
-@property (readonly)  OdbcConnection * connection;
-@property (readonly)  BOOL             wasNull;
+@property (weak, readonly)  OdbcConnection * connection;
+@property (readonly)  bool             wasNull;
 @property (nonatomic) unsigned long    concurrency;
 
 @property (readonly,nonatomic) OdbcResultDescriptor  * resultDescriptor;

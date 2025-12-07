@@ -6,8 +6,21 @@
 //  Copyright (c) 2013 Mikael Hakman. All rights reserved.
 //
 
-#import "OdbcTests.h"
+#import "OdbcBase.h"
 
-@interface OdbcStoreTests : OdbcTests
+@interface OdbcStoreTestsSQLite : OdbcBase
+- (void) initialize;
+- (NSString *) backend;
+@end
 
+@interface OdbcStoreTestsPGSQL : OdbcStoreTestsSQLite
+- (NSString *) backend;
+@end
+
+@interface OdbcStoreTestsMySQL : OdbcStoreTestsSQLite
+- (NSString *) backend;
+@end
+
+@interface OdbcStoreTestsMSSQL : OdbcStoreTestsSQLite
+- (NSString *) backend;
 @end

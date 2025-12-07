@@ -8,9 +8,10 @@
 
 #import "OdbcException.h"
 
-#import <iODBC/sql.h>
-#import <iODBC/sqltypes.h>
-#import <iODBC/sqlext.h>
+#include <sqltypes.h>
+#include <sql.h>
+#include <sqlucode.h>
+#include <sqlext.h>
 
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
@@ -23,6 +24,12 @@ void raiseInvalidHandle (const char * method, const char * function) {
 void raiseOdbcHandle (const char * method, const char * function, SQLSMALLINT handleType, SQLHANDLE handle) {
     
     [OdbcException raiseOdbcHandle : method function : function handleType : handleType handle : handle];
+}
+
+void logOdbcHandle (const char * method, const char * function, SQLSMALLINT handleType, SQLHANDLE handle) {
+    
+    [OdbcException logOdbcHandle : method function : function handleType : handleType handle : handle];
+    
 }
 
 void raiseOdbcException (const char * method, const char * function, const char * message) {
@@ -95,7 +102,23 @@ void raiseOdbcExceptionWithSqlState (const char * method,
                                                                             reason : @"Odbc Error"
                                                                           userInfo : diagRec];
     [exception raise];
-    
+}
+
++ (void) logOdbcHandle : (const char *) method
+              function : (const char *) function
+            handleType : (SQLSMALLINT) handleType
+                handle : (SQLHANDLE) handle {
+
+    SQLCHAR sqlState[6], message[512];
+    SQLINTEGER nativeError;
+    SQLSMALLINT msgLen;
+    int rec = 1;
+    while (SQLGetDiagRec(handleType, handle, rec,
+                         sqlState, &nativeError, message, sizeof(message), &msgLen)
+           == SQL_SUCCESS) {
+        NSLog(@"[ODBC INFO][%s] %s: %s\n", function, sqlState, message);
+        rec++;
+    }
 }
 
 + (void) raiseOdbcException : (const char *) method

@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "D45F4BF6-75C9-4FF1-BEF9-41F1A97396F3",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "performanceAntipatternCheckerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:ODBC.xcodeproj",
+        "identifier" : "CEEC0DB32EE1F66500C68029",
+        "name" : "OdbcTests"
+      }
+    }
+  ],
+  "version" : 1
+}

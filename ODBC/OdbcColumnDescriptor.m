@@ -10,15 +10,11 @@
 #import "OdbcStatement.h"
 #import "OdbcException.h"
 
-#import <iODBC/sql.h>
-#import <iODBC/sqltypes.h>
-#import <IODBC/sqlext.h>
-
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 @interface OdbcColumnDescriptor ()
 
-@property OdbcStatement * statement;
+@property(weak) OdbcStatement * statement;
 @property int             columnNumber;
 @property NSString      * columnName;
 @property short           dataType;
@@ -27,6 +23,10 @@
 @property BOOL            nullable;
 
 @end
+
+#include <sqltypes.h>
+#include <sql.h>
+#include <sqlext.h>
 
 @implementation OdbcColumnDescriptor
 

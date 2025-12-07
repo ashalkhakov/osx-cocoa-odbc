@@ -7,7 +7,7 @@
 //
 
 #import "OdbcStoreTests.h"
-#import "OdbcTests.h"
+#import "OdbcBase.h"
 #import "OdbcStore.h"
 #import "Author.h"
 #import "Book.h"
@@ -18,7 +18,7 @@ NSString * PersistentStoreType;
 NSString * PersistentStoreClass;
 NSURL    * PersistentStoreUrl;
 
-@interface OdbcStoreTests ()
+@interface OdbcStoreTestsSQLite ()
 
 @property (nonatomic) NSManagedObjectContext       * moc;
 @property (nonatomic) NSPersistentStoreCoordinator * psc;
@@ -29,17 +29,23 @@ NSURL    * PersistentStoreUrl;
 
 @end
 
-@implementation OdbcStoreTests
+@implementation OdbcStoreTestsSQLite
 
 @synthesize moc,psc,mom,psu,afd,productName;
 
-+ (void) initialize {
+- (void) initialize {
+    
+    [super initialize];
     
     PersistentStoreType = @"OdbcStore";
     
     PersistentStoreClass = @"OdbcStore";
     
-    NSString * url = [NSString stringWithFormat : @"odbc:///%@?username=%@&password=%@",DataSourceName,Username,Password];
+    NSString *dsn = self->configuration[@"DataSourceName"];
+    NSString *username = self->configuration[@"Username"];
+    NSString *password = self->configuration[@"Password"];
+    
+    NSString * url = [NSString stringWithFormat : @"odbc:///%@?username=%@&password=%@", dsn, username ? username : @"", password ? password : @""];
     
     PersistentStoreUrl = [NSURL URLWithString : url];
     
@@ -75,10 +81,7 @@ NSURL    * PersistentStoreUrl;
                                             options : nil
                                               error : &error];
     
-    if (! ok) {
-    
-        STFail ([error description]);
-    }
+    XCTAssertTrue(ok, @"%@", [error description]);
     
     return self->psc;
 }
@@ -86,16 +89,12 @@ NSURL    * PersistentStoreUrl;
 - (NSManagedObjectModel *) mom {
     
     if (self->mom) return self->mom;
-        
-    NSString * modelPath =
     
-    [NSString stringWithFormat : @"file://%s/OdbcTests.octest/Contents/Resources/%@.momd",
-                                 TARGET_BUILD_DIR,self.productName];
-    
-    NSURL * modelURL = [NSURL URLWithString : modelPath];
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSURL *modelURL = [bundle URLForResource:self.productName withExtension:@"momd"];
     
     self->mom = [[NSManagedObjectModel alloc] initWithContentsOfURL : modelURL];
-        
+    
     if (! self->mom) {
         
         NSString * desc = [NSString stringWithFormat : @"Cannot create managed object model from url '%@'",modelURL];
@@ -104,7 +103,7 @@ NSURL    * PersistentStoreUrl;
         
         NSError * error = [NSError errorWithDomain : @"Managed Object Model" code : 0 userInfo : dict];
         
-        STFail ([error description]);
+        XCTFail (@"%@", [error description]);
         
         return nil;
     }
@@ -122,7 +121,7 @@ NSURL    * PersistentStoreUrl;
         
         return self->psu;
     }
-        
+    
     NSString * storeFileName = [NSString stringWithFormat:@"%@.storedata",self.productName];
     
     self->psu = [self.afd URLByAppendingPathComponent : storeFileName];
@@ -160,12 +159,12 @@ NSURL    * PersistentStoreUrl;
                              withIntermediateDirectories : YES
                                               attributes : nil
                                                    error : &error];
-                        
+            
             if (! ok) {
                 //
                 // Could not create directory
                 //
-                STFail ([error description]);
+                XCTFail (@"%@", [error description]);
                 
                 return nil;
             }
@@ -174,8 +173,8 @@ NSURL    * PersistentStoreUrl;
             //
             // It was some other error
             //
-            STFail ([error description]);
-                        
+            XCTFail (@"%@", [error description]);
+            
             return nil;
         }
         
@@ -198,8 +197,8 @@ NSURL    * PersistentStoreUrl;
             
             error = [NSError errorWithDomain : @"Applcation Support Directory" code : 101 userInfo : dict];
             
-            STFail ([error description]);
-                        
+            XCTFail (@"%@", [error description]);
+            
             return nil;
         }
     }
@@ -238,7 +237,11 @@ NSURL    * PersistentStoreUrl;
 
 - (void) setUp {
     
+    [self initialize];
+
     [super setUp];
+    
+    [self disconnect];
     
     [self setUpCoreData];
 }
@@ -246,6 +249,8 @@ NSURL    * PersistentStoreUrl;
 - (void) tearDown {
     
     [self tearDownCoreData];
+    
+    [self connect];
     
     [super tearDown];
 }
@@ -266,7 +271,7 @@ NSURL    * PersistentStoreUrl;
     
     bool ok = [self.moc save : &error];
     
-    if (! ok) STFail (error.description);
+    if (! ok) XCTFail (@"%@", error.description);
     
     NSSet * objs = self.moc.registeredObjects;
     
@@ -290,10 +295,12 @@ NSURL    * PersistentStoreUrl;
     
     self->mom = nil;
     
+    [self connect];
+    
     NSArray * tables = @[@"bookAuthors",@"Author",@"Book",@"CoreDataEntity"];
     
     for (NSString * table in tables) {
-                
+        
         @try {
             
             NSString * sql = [NSString stringWithFormat : @"delete from %@",table];
@@ -303,7 +310,7 @@ NSURL    * PersistentStoreUrl;
             [self->connection commit];
             
         } @catch (OdbcException * exception) {}
-     }
+    }
     
     for (NSString * table in tables) {
         
@@ -317,6 +324,8 @@ NSURL    * PersistentStoreUrl;
             
         } @catch (NSException * exception) {}
     }
+    
+    [self disconnect];
 }
 
 - (void) setUpObjectsAndRelationships {
@@ -342,7 +351,7 @@ NSURL    * PersistentStoreUrl;
     [mo setValue : @"Inger" forKey : @"firstName"];
     
     [mo setValue : @"Hakman" forKey : @"lastName"];
-
+    
     mo = [[NSManagedObject alloc] initWithEntity : ed insertIntoManagedObjectContext : self.moc];
     
     [mo setValue : @"Mikael" forKey : @"firstName"];
@@ -376,7 +385,7 @@ NSURL    * PersistentStoreUrl;
 - (void) setUpRelationships {
     
     Author * ingerAuthor = (Author *) [self entityName : @"Author" attrName : @"firstName" attrValue : @"Inger"];
-
+    
     Author * mikaelAuthor = (Author *) [self entityName : @"Author" attrName : @"firstName" attrValue : @"Mikael"];
     
     Book * firstBook = (Book *) [self entityName : @"Book" attrName : @"title" attrValue : @"First book"];
@@ -412,12 +421,12 @@ NSURL    * PersistentStoreUrl;
     
     if (! authors) {
         
-        STFail (error.description);
+        XCTFail (@"%@", error.description);
         
         return;
     }
-            
-    STAssertEquals (authors.count,(NSUInteger)2,@"");
+    
+    XCTAssertEqual(authors.count,(NSUInteger)2);
     
     fr = [NSFetchRequest fetchRequestWithEntityName : @"Book"];
     
@@ -425,12 +434,12 @@ NSURL    * PersistentStoreUrl;
     
     if (! books) {
         
-        STFail (error.description);
+        XCTFail (@"%@", error.description);
         
         return;
     }
     
-    STAssertEquals (books.count,(NSUInteger)3,@"");
+    XCTAssertEqual(books.count,(NSUInteger)3);
     
     NSSet * objs = self.moc.registeredObjects;
     
@@ -465,12 +474,12 @@ NSURL    * PersistentStoreUrl;
     
     if (! authors) {
         
-        STFail (error.description);
+        XCTFail (@"%@", error.description);
         
         return;
     }
     
-    STAssertEquals (authors.count,(NSUInteger)1,@"");
+    XCTAssertEqual (authors.count,(NSUInteger)1);
     
     fr = [NSFetchRequest fetchRequestWithEntityName : @"Book"];
     
@@ -478,12 +487,12 @@ NSURL    * PersistentStoreUrl;
     
     if (! books) {
         
-        STFail (error.description);
+        XCTFail (@"%@", error.description);
         
         return;
     }
     
-    STAssertEquals (books.count,(NSUInteger)3,@"");
+    XCTAssertEqual(books.count,(NSUInteger)3);
     
     NSSet * objs = self.moc.registeredObjects;
     
@@ -511,6 +520,34 @@ NSURL    * PersistentStoreUrl;
     self->psc = nil;
     
     self->mom = nil;
+}
+
+- (NSString *)backend {
+    return @"SQLite";
+}
+
+@end
+
+@implementation OdbcStoreTestsPGSQL
+
+- (NSString *)backend {
+    return @"PGSQL";
+}
+
+@end
+
+@implementation OdbcStoreTestsMySQL
+
+- (NSString *)backend {
+    return @"MySQL";
+}
+
+@end
+
+@implementation OdbcStoreTestsMSSQL
+
+- (NSString *) backend {
+    return @"MSSQL";
 }
 
 @end

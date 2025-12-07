@@ -6,10 +6,23 @@
 //  Copyright (c) 2013 Mikael Hakman. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-#import "OdbcTests.h"
+#import "OdbcBase.h"
 
-@interface StatementTests : OdbcTests
+@interface StatementTestsSQLite : OdbcBase
+- (void)insertIntoTestTab:(int)ident name:(NSString *)name price:(double)price date:(NSDate *)date time:(NSDate *)time ts:(NSDate *)ts;
+- (NSString *) backend;
+@end
 
+@interface StatementTestsPGSQL : StatementTestsSQLite
+- (NSString *) backend;
+@end
+
+@interface StatementTestsMySQL : StatementTestsSQLite
+- (NSString *) backend;
+@end
+
+@interface StatementTestsMSSQL : StatementTestsSQLite
+- (NSString *) backend;
 @end

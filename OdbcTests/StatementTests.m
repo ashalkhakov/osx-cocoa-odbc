@@ -10,15 +10,74 @@
 
 #import <Odbc/Odbc.h>
 
-@implementation StatementTests
+@implementation StatementTestsSQLite
+
+- (void)insertIntoTestTab:(int)ident name:(NSString *)name price:(double)price date:(NSDate *)date time:(NSDate *)time ts:(NSDate *)ts {
+    NSString * dbms = self->connection.dbmsName;
+
+    [self->statement setLong : 1 value : ident];
+    [self->statement setString : 2 value : name];
+    [self->statement setDouble : 3 value : price];
+    [self->statement setDate : 4 value : date];
+    
+    if ([dbms hasPrefix : @"Oracle"]) {
+
+        [self->statement setTimestamp : 5 value : time];
+        
+    } else {
+        
+        [self->statement setTime : 5 value : time];
+    }
+    
+    if ([dbms hasPrefix : @"SQLite"]) {
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+        formatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT : 0];
+        NSString *result = [formatter stringFromDate:ts];
+
+        [self->statement setString : 6 value : result];
+        
+    } else {
+        
+        [self->statement setTimestamp : 6 value : ts];
+    }
+    
+    [self->statement execute];
+    [self->connection commit];
+}
 
 - (void) setUp {
     
+    [self initialize];
+
     [super setUp];
+    
+    NSString * dbms = self->connection.dbmsName;
+    
+    self->statement = [self->connection newStatement];
+    
+    NSString *sql;
+    if ([dbms hasPrefix : @"Oracle"]) {
+        
+        sql = @"insert into testtab(id,name,price,\"DATE\",\"TIME\",ts) values (?,?,?,?,?,?)";
+        
+    } else {
+        
+        sql = @"insert into testtab(id,name,price,date,time,ts) values (?,?,?,?,?,?)";
+    }
+    
+    [self->statement prepare:sql];
+    
+    [self insertIntoTestTab:1 name:@"Name 1" price:1.1 date:[self dateYear:2001 month:1 day:1] time:[self timeHour:1 minute:1 second:1] ts:[self timestampYear:2001 month:1 day:1 hour:1 minute:1 second:1]];
+    [self insertIntoTestTab:2 name:@"Name 2" price:2.2 date:[self dateYear:2002 month:2 day:2] time:[self timeHour:2 minute:2 second:2] ts:[self timestampYear:2002 month:2 day:2 hour:2 minute:2 second:2]];
+    [self insertIntoTestTab:3 name:@"Name 3" price:3.3 date:[self dateYear:2003 month:3 day:3] time:[self timeHour:3 minute:3 second:3] ts:[self timestampYear:2003 month:3 day:3 hour:3 minute:3 second:3]];
+    [self insertIntoTestTab:4 name:@"Name 4" price:4.4 date:[self dateYear:2004 month:4 day:4] time:[self timeHour:4 minute:4 second:4] ts:[self timestampYear:2004 month:4 day:4 hour:4 minute:4 second:4]];
+    
+    self->statement = [self->connection newStatement];
 }
 
 - (void) tearDown {
-    
+    self->statement = nil;
     [super tearDown];
 }
 
@@ -63,14 +122,19 @@
     } else {
         
         dateComps = [NSDateComponents new];
+
     }
+    
+    dateComps.year = 1;
+    dateComps.month = 1;
+    dateComps.day = 1;
     
     dateComps.hour = hour;
     
     dateComps.minute = minute;
     
     dateComps.second = second;
-        
+    
     //gregorian.timeZone = [NSTimeZone timeZoneForSecondsFromGMT : 0];
     
     NSDate * date = [gregorian dateFromComponents: dateComps];
@@ -101,7 +165,7 @@
     
     NSCalendar * gregorian = [[NSCalendar alloc] initWithCalendarIdentifier : NSGregorianCalendar];
     
-    //gregorian.timeZone = [NSTimeZone timeZoneForSecondsFromGMT : 0];
+    gregorian.timeZone = [NSTimeZone timeZoneForSecondsFromGMT : 0];
     
     NSDate * date = [gregorian dateFromComponents: dateComps];
     
@@ -112,36 +176,37 @@
     
     OdbcStatement * stmt = [OdbcStatement statementWithConnection : self->connection];
         
-    STAssertEqualObjects (stmt.connection,self->connection,@"");
+    XCTAssertEqualObjects (stmt.connection,self->connection);
 }
 
 - (void) testInitWithConnection {
     
     OdbcStatement * stmt = [[OdbcStatement alloc] initWithConnection : self->connection];
 
-    STAssertEqualObjects (stmt.connection,self->connection,@"");
+    XCTAssertEqualObjects (stmt.connection,self->connection);
 }
 
 - (void) testExecDirect {
-    
+
     [self->statement execDirect : @"select * from testtab"];
     
     int rowCount = 0;
     
     while ([self->statement fetch]) {
-        
+
         rowCount ++;
     }
-    
-    STAssertEquals (rowCount,4,@"");
+
+    XCTAssertEqual (rowCount,4);
     
     [self->statement closeCursor];
-    
+
     [self->connection commit];
 }
 
 - (void) testFetch {
 
+    self->statement = [self->connection newStatement];
     [self->statement execDirect : @"select * from testtab"];
     
     int rowCount = 0;
@@ -151,7 +216,7 @@
         rowCount ++;
     }
     
-    STAssertEquals (rowCount,4,@"");
+    XCTAssertEqual (rowCount,4);
     
     [self->statement closeCursor];
     
@@ -173,6 +238,8 @@
 
 - (void) testPrepare {
     
+    self->statement = [self->connection newStatement];
+    
     NSString * dbms = self->connection.dbmsName;
     
     NSString * sql;
@@ -224,16 +291,16 @@
     
     bool found = [self->statement fetch];
     
-    STAssertTrue (found,@"");
+    XCTAssertTrue (found);
     
     if (! found) return;
     
     long objId = [self->statement getLongByName : @"id"];
     
-    STAssertEquals (objId,1L,@"");
+    XCTAssertEqual (objId,1L);
     
     [self->statement closeCursor];
-    
+
     [self->statement setLong : 1 value : 2];
     
     [self->statement setString : 2 value : @"Name 2"];
@@ -270,17 +337,15 @@
     
     found = [self->statement fetch];
     
-    STAssertTrue (found,@"");
+    XCTAssertTrue (found);
     
     if (! found) return;
     
     objId = [self->statement getLongByName : @"id"];
     
-    STAssertEquals(objId,2L,@"");
+    XCTAssertEqual(objId,2L);
     
     [self->statement closeCursor];
-    
-    [self->connection commit];
 }
 
 - (void) testExecute {
@@ -297,7 +362,7 @@
         
         sql = @"select * from testtab where id = ? and name = ? and price = ? and date = ? and time = ? and ts = ?";
     }
-    
+
     [self->statement prepare : sql];
     
     [self->statement setLong : 1 value : 1];
@@ -336,13 +401,13 @@
     
     bool found = [self->statement fetch];
     
-    STAssertTrue (found,@"");
+    XCTAssertTrue (found);
     
     if (! found) return;
     
     long objId = [self->statement getLongByName : @"id"];
     
-    STAssertEquals (objId,1L,@"");
+    XCTAssertEqual (objId,1L);
     
     [self->statement closeCursor];
     
@@ -382,13 +447,13 @@
     
     found = [self->statement fetch];
     
-    STAssertTrue (found,@"");
+    XCTAssertTrue (found);
     
     if (! found) return;
     
     objId = [self->statement getLongByName : @"id"];
     
-    STAssertEquals(objId,2L,@"");
+    XCTAssertEqual(objId,2L);
     
     [self->statement closeCursor];
     
@@ -398,6 +463,8 @@
 - (void) testGetData {
     
     NSString * dbms = self->connection.dbmsName;
+    
+    self->statement = [self->connection newStatement];
     
     [self->statement execDirect : @"select * from testtab order by id"];
     
@@ -411,21 +478,21 @@
         
         long objId = [self->statement getLong : 1];
         
-        STAssertEquals (objId,3L,@"");
+        XCTAssertEqual (objId,3L);
         
         NSString * name = [self->statement getString : 2];
         
-        STAssertEqualObjects (name,@"Name 3",@"");
+        XCTAssertEqualObjects(name,@"Name 3");
         
         double price = [self->statement getDouble : 3];
         
-        STAssertEquals (price,3.3,@"");
+        XCTAssertEqual (price,3.3);
         
         NSDate * date1 = [self->statement getDate : 4];
         
         NSDate * date2 = [self dateYear : 2003 month : 3 day : 3];
         
-        STAssertEqualObjects (date1,date2,@"");
+        XCTAssertEqualObjects (date1,date2);
 
         NSDate * time1;
         
@@ -440,16 +507,17 @@
         
         NSDate * time2 = [self timeHour : 3 minute : 3 second : 3];
         
-        STAssertEqualObjects(time1,time2,@"");
+        XCTAssertEqualObjects(time1,time2);
         
         NSDate * ts1 = [self->statement getTimestamp : 6];
         
         NSDate * ts2 = [self timestampYear:2003 month:3 day:3 hour : 3 minute : 3 second : 3];
         
-        STAssertEqualObjects (ts1,ts2,@"");
+        XCTAssertEqualObjects (ts1,ts2);
+
     }
     
-    STAssertEquals(rowCount,4,@"");
+    XCTAssertEqual(rowCount,4);
     
     [self->statement closeCursor];
     
@@ -472,21 +540,21 @@
         
         long objId = [self->statement getLongByName : @"id"];
         
-        STAssertEquals (objId,3L,@"");
+        XCTAssertEqual (objId,3L);
         
         NSString * name = [self->statement getStringByName : @"name"];
         
-        STAssertEqualObjects (name,@"Name 3",@"");
+        XCTAssertEqualObjects (name,@"Name 3");
         
         double price = [self->statement getDoubleByName : @"price"];
         
-        STAssertEquals (price,3.3,@"");
+        XCTAssertEqual (price,3.3);
         
         NSDate * date1 = [self->statement getDateByName : @"date"];
                 
         NSDate * date2 = [self dateYear : 2003 month : 3 day : 3];
 
-        STAssertEqualObjects (date1,date2,@"");
+        XCTAssertEqualObjects (date1,date2);
         
         NSDate * time1;
         
@@ -501,16 +569,16 @@
         
         NSDate * time2 = [self timeHour : 3 minute : 3 second : 3];
         
-        STAssertEqualObjects(time1,time2,@"");
+        XCTAssertEqualObjects(time1,time2);
         
         NSDate * ts1 = [self->statement getTimestampByName : @"ts"];
         
         NSDate * ts2 = [self timestampYear:2003 month:3 day:3 hour : 3 minute : 3 second : 3];
         
-        STAssertEqualObjects (ts1,ts2,@"");
+        XCTAssertEqualObjects (ts1,ts2);
     }
     
-    STAssertEquals (rowCount,4,@"");
+    XCTAssertEqual (rowCount,4);
     
     [self->statement closeCursor];
     
@@ -620,7 +688,7 @@
     
     bool found = [self->statement fetch];
     
-    STAssertTrue (found,@"");
+    XCTAssertTrue (found);
     
     if (! found) return;
     
@@ -628,38 +696,70 @@
     
     NSNumber * objId2 = [NSNumber numberWithLong : 1L];
     
-    STAssertEqualObjects (objId1,objId2,@"");
+    XCTAssertEqualObjects (objId1,objId2);
     
     NSString * name1 = [self->statement getObjectByName : @"name"];
     
     NSString * name2 = @"Name 1";
     
-    STAssertEqualObjects(name1,name2,@"");
+    XCTAssertEqualObjects(name1,name2);
     
     NSNumber * price1 = [self->statement getObjectByName : @"price"];
     
     NSNumber * price2 = @(1.1);
     
-    STAssertEquals(price1.doubleValue,price2.doubleValue,@"");
+    XCTAssertEqual(price1.doubleValue,price2.doubleValue);
+
+    id date1Object = [self->statement getObjectByName : @"date"];
+    if ([dbms hasPrefix : @"SQLite"]) {
+
+        XCTAssert([date1Object isKindOfClass:[NSString class]]);
+        NSString *date1 = (NSString *)date1Object;
+        
+        XCTAssertEqualObjects(date1, @"2001-01-01");
+
+    } else {
+
+        XCTAssert([date1Object isKindOfClass:[NSDate class]]);
+        NSDate *date1 = (NSDate *)date1Object;
+        NSDate *date2 = [self dateYear : 2001 month : 1 day : 1];
+
+        XCTAssertEqualObjects(date1, date2);
+
+    }
     
-    NSDate * date1 = [self->statement getObjectByName : @"date"];
+    id time1Object = [self->statement getObjectByName : @"time"];
+    if ([dbms hasPrefix : @"SQLite"]) {
+
+        XCTAssert([time1Object isKindOfClass:[NSString class]]);
+        XCTAssertEqualObjects((NSString *)time1Object, @"01:01:01");
+
+    } else {
+
+        XCTAssert([time1Object isKindOfClass:[NSDate class]]);
+        NSDate *time1 = (NSDate *)time1Object;
+        NSDate *time2 = [self timeHour : 1 minute : 1 second : 1];
+        
+        XCTAssertEqualObjects(time1,time2);
+    }
+
+    id ts1 = [self->statement getObjectByName : @"ts"];
     
-    NSDate * date2 = [self dateYear : 2001 month : 1 day : 1];
-    
-    STAssertEqualObjects(date1,date2,@"");
-    
-    NSDate * time1 = [self->statement getObjectByName : @"time"];
-    
-    NSDate * time2 = [self timeHour : 1 minute : 1 second : 1];
-    
-    STAssertEqualObjects(time1,time2,@"");
-    
-    NSDate * ts1 = [self->statement getObjectByName : @"ts"];
-    
-    NSDate * ts2 = [self timestampYear : 2001 month : 1 day : 1 hour : 1 minute : 1 second : 1];
-    
-    STAssertEqualObjects(ts1,ts2,@"");
-    
+    if ([dbms hasPrefix : @"SQLite"]) {
+        
+        XCTAssert([ts1 isKindOfClass:[NSString class]]);
+        
+        XCTAssertEqualObjects(ts1, @"2001-01-01 01:01:01");
+        
+    } else {
+        
+        NSDate * ts2 = [self timestampYear : 2001 month : 1 day : 1 hour : 1 minute : 1 second : 1];
+        
+        XCTAssert([ts1 isKindOfClass:[NSDate class]]);
+        
+        XCTAssertEqualObjects(ts1, ts2);
+    }
+
     [self->statement closeCursor];
     
     [self->statement setLong : 1 value : 2];
@@ -698,7 +798,7 @@
     
     found = [self->statement fetch];
     
-    STAssertTrue (found,@"");
+    XCTAssertTrue (found);
     
     if (! found) return;
     
@@ -706,7 +806,7 @@
     
     objId2 = [NSNumber numberWithLong : 2L];
     
-    STAssertEqualObjects (objId1,objId2,@"");
+    XCTAssertEqualObjects (objId1,objId2);
     
     [self->statement closeCursor];
     
@@ -766,7 +866,7 @@
     
     bool found = [self->statement fetch];
     
-    STAssertTrue (found,@"");
+    XCTAssertTrue (found);
     
     if (! found) return;
     
@@ -774,37 +874,71 @@
     
     NSNumber * objId2 = [NSNumber numberWithLong : 1L];
     
-    STAssertEqualObjects (objId1,objId2,@"");
+    XCTAssertEqualObjects (objId1,objId2);
     
     NSString * name1 = [self->statement getObject : 2];
     
     NSString * name2 = @"Name 1";
     
-    STAssertEqualObjects(name1,name2,@"");
+    XCTAssertEqualObjects(name1,name2);
     
     NSNumber * price1 = [self->statement getObject : 3];
     
     NSNumber * price2 = @(1.1);
     
-    STAssertEquals(price1.doubleValue,price2.doubleValue,@"");
+    XCTAssertEqual(price1.doubleValue,price2.doubleValue);
     
-    NSDate * date1 = [self->statement getObject : 4];
+    id date1Object = [self->statement getObject : 4];
+    if ([dbms hasPrefix : @"SQLite"]) {
+
+        XCTAssert([date1Object isKindOfClass:[NSString class]]);
+        NSString *date1 = (NSString *)date1Object;
+        
+        XCTAssertEqualObjects(date1, @"2001-01-01");
+
+    } else {
+
+        XCTAssert([date1Object isKindOfClass:[NSDate class]]);
+        NSDate *date1 = (NSDate *)date1Object;
+        NSDate *date2 = [self dateYear : 2001 month : 1 day : 1];
+
+        XCTAssertEqualObjects(date1, date2);
+
+    }
+
     
-    NSDate * date2 = [self dateYear : 2001 month : 1 day : 1];
+    id time1Object = [self->statement getObject:5];
+    if ([dbms hasPrefix : @"SQLite"]) {
+
+        XCTAssert([time1Object isKindOfClass:[NSString class]]);
+        XCTAssertEqualObjects((NSString *)time1Object, @"01:01:01");
+
+    } else {
+
+        XCTAssert([time1Object isKindOfClass:[NSDate class]]);
+        NSDate *time1 = (NSDate *)time1Object;
+        NSDate *time2 = [self timeHour : 1 minute : 1 second : 1];
+        
+        XCTAssertEqualObjects(time1,time2);
+    }
     
-    STAssertEqualObjects(date1,date2,@"");
+    id ts1 = [self->statement getObject : 6];
     
-    NSDate * time1 = [self->statement getObject : 5];
-    
-    NSDate * time2 = [self timeHour : 1 minute : 1 second : 1];
-    
-    STAssertEqualObjects(time1,time2,@"");
-    
-    NSDate * ts1 = [self->statement getObject : 6];
-    
-    NSDate * ts2 = [self timestampYear : 2001 month : 1 day : 1 hour : 1 minute : 1 second : 1];
-    
-    STAssertEqualObjects(ts1,ts2,@"");
+    if ([dbms hasPrefix : @"SQLite"]) {
+        
+        XCTAssert([ts1 isKindOfClass:[NSString class]]);
+        
+        XCTAssertEqualObjects(ts1, @"2001-01-01 01:01:01");
+        
+    } else {
+        
+        NSDate * ts2 = [self timestampYear : 2001 month : 1 day : 1 hour : 1 minute : 1 second : 1];
+        
+        XCTAssert([ts1 isKindOfClass:[NSDate class]]);
+        
+        XCTAssertEqualObjects(ts1, ts2);
+    }
+
     
     [self->statement closeCursor];
     
@@ -844,7 +978,7 @@
     
     found = [self->statement fetch];
     
-    STAssertTrue (found,@"");
+    XCTAssertTrue (found);
     
     if (! found) return;
     
@@ -852,7 +986,7 @@
     
     objId2 = [NSNumber numberWithLong : 2L];
     
-    STAssertEqualObjects (objId1,objId2,@"");
+    XCTAssertEqualObjects (objId1,objId2);
     
     [self->statement closeCursor];
     
@@ -862,7 +996,7 @@
 - (void) testSetData {
     
     NSString * dbms = self->connection.dbmsName;
-    
+
     [self->statement prepare : @"select * from testtab where id = ? and name = ? and price = ? and ts = ?"];
     
     [self->statement setLong : 1 value : 1];
@@ -886,19 +1020,19 @@
     
     bool found = [self->statement fetch];
     
-    STAssertTrue (found,@"");
+    XCTAssertTrue (found);
     
     if (! found) return;
     
     long objId = [self->statement getLongByName : @"id"];
     
-    STAssertEquals (objId,1L,@"");
+    XCTAssertEqual (objId,1L);
     
     [self->statement closeCursor];
     
     [self->statement setLong : 1 value : 4];
     
-    [self->statement setString : 2 value : @"N4"];
+    [self->statement setString : 2 value : @"Name 4"];
     
     [self->statement setDouble : 3 value : 4.4];
     
@@ -917,18 +1051,18 @@
     
     found = [self->statement fetch];
     
-    STAssertTrue (found,@"");
+    XCTAssertTrue (found);
     
     if (! found) return;
     
     objId = [self->statement getLongByName : @"id"];
     
-    STAssertEquals (objId,4L,@"");
+    XCTAssertEqual (objId,4L);
     
     [self->statement closeCursor];
     
     [self->statement setLong : 1 value : 2];
-    
+
     [self->statement setString : 2 value : @"Name 2"];
     
     [self->statement setDouble : 3 value : 2.2];
@@ -948,7 +1082,7 @@
     
     found = [self->statement fetch];
     
-    STAssertTrue (found,@"");
+    XCTAssertTrue (found);
     
     [self->statement closeCursor];
 
@@ -958,6 +1092,8 @@
 - (void) testSetObject {
     
     NSString * dbms = self->connection.dbmsName;
+    
+    self->statement = [self->connection newStatement];
     
     [self->statement prepare : @"select * from testtab where id = ? and name = ? and price = ? and ts = ?"];
     
@@ -982,13 +1118,13 @@
     
     bool found = [self->statement fetch];
     
-    STAssertTrue (found,@"");
+    XCTAssertTrue (found);
     
     if (! found) return;
     
     long objId = [self->statement getLongByName : @"id"];
     
-    STAssertEquals (objId,1L,@"");
+    XCTAssertEqual (objId,1L);
     
     [self->statement closeCursor];
     
@@ -1013,13 +1149,13 @@
     
     found = [self->statement fetch];
     
-    STAssertTrue (found,@"");
+    XCTAssertTrue (found);
     
     if (! found) return;
     
     objId = [self->statement getLongByName : @"id"];
     
-    STAssertEquals (objId,2L,@"");
+    XCTAssertEqual (objId,2L);
     
     [self->statement closeCursor];
     
@@ -1028,18 +1164,20 @@
 
 - (void) testHstmt {
     
-    STAssertTrue (self->statement.hstmt != 0,@"");
+    XCTAssertTrue (self->statement.hstmt != 0);
+    
 }
 
 - (void) testConnection {
+
+    XCTAssertEqualObjects (self->statement.connection,self->connection);
     
-    STAssertEqualObjects (self->statement.connection,self->connection,@"");
 }
 
 - (void) testWasNull {
-    
+
     [self->statement execDirect : @"insert into testtab (id,name) values (10,'Name 10')"];
-    
+
     [self->statement execDirect : @"select * from testtab order by id"];
     
     int rowCount = 0;
@@ -1056,17 +1194,17 @@
         
         if (objId < 10) {
             
-            STAssertFalse (wasNull,@"");
+            XCTAssertFalse (wasNull);
             
         } else {
             
-            STAssertTrue (wasNull,@"");
+            XCTAssertTrue (wasNull);
             
-            STAssertEquals (price,0.0,@"");
+            XCTAssertEqual (price,0.0);
         }
     }
     
-    STAssertEquals (rowCount,5,@"");
+    XCTAssertEqual (rowCount,5);
     
     [self->statement closeCursor];
     
@@ -1076,8 +1214,9 @@
 - (void) testConcurency {
     
     unsigned long concurency = self->statement.concurrency;
-        
-    STAssertTrue (concurency > 0,@"");
+    
+    XCTAssertTrue (concurency > 0);
+    
 }
 /*
 - (void) testSetConcurency {
@@ -1112,6 +1251,34 @@
     [self->statement execDirect : @"update testtab set name = 'test' where id = 1"];
     
     [self->connection commit];
+}
+
+- (NSString *) backend {
+    return @"SQLite";
+}
+
+@end
+
+@implementation StatementTestsPGSQL
+
+- (NSString *) backend {
+    return @"PGSQL";
+}
+
+@end
+
+@implementation StatementTestsMySQL
+
+- (NSString *) backend {
+    return @"MySQL";
+}
+
+@end
+
+@implementation StatementTestsMSSQL
+
+- (NSString *) backend {
+    return @"MSSQL";
 }
 
 @end

@@ -204,8 +204,9 @@ NSString * PersistentStoreClass = @"OdbcStore";
 - (NSString *) loginServerPath {
     
     NSBundle * bundle = [NSBundle bundleForClass : [OdbcAppDelegate class]];
+    NSString * parentDir = [bundle.bundlePath stringByDeletingLastPathComponent]; // remove the Odbc.framework directory
     
-    NSString * loginPath = [NSString stringWithFormat : @"%@/LoginServer.app/Contents/MacOS/LoginServer",bundle.bundlePath];
+    NSString * loginPath = [NSString stringWithFormat : @"%@/LoginServer.app/Contents/MacOS/LoginServer",parentDir];
     
     return loginPath;
 }

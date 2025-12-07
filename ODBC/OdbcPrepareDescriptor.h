@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import <iODBC/sql.h>
+#include <sqltypes.h>
+#include <sql.h>
 
 @class OdbcStatement;
 @class OdbcParameterDescriptor;
@@ -17,12 +18,12 @@
     
 @protected
     
-    OdbcStatement  * statement;
+    __weak OdbcStatement  * statement;
     SQLSMALLINT      numParams;
     NSMutableArray * parameterDescriptors;
 }
 
-@property (readonly) OdbcStatement * statement;
+@property (weak,readonly) OdbcStatement * statement;
 @property (readonly) SQLSMALLINT     numParams;
 @property (readonly) NSArray       * parameterDescriptors;
 

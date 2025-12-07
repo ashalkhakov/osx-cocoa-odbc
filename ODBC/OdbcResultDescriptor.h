@@ -20,7 +20,7 @@
     NSMutableDictionary * columnNameToNumberDict;
 }
 
-@property (readonly) OdbcStatement * statement;
+@property (weak,readonly) OdbcStatement * statement;
 @property (readonly) NSArray       * columnDescriptors;
 @property (readonly) int             numResultCols;
 @property (readonly) NSDictionary  * columnNameToNumberDict;

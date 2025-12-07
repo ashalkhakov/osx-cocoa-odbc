@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>OdbcStatement Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">ODBC </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">Datakonsulten AB</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/concurrency">concurrency</option>
+		
+		<option value="//api/name/connection">connection</option>
+		
+		<option value="//api/name/hstmt">hstmt</option>
+		
+		<option value="//api/name/prepareDescriptor">prepareDescriptor</option>
+		
+		<option value="//api/name/resultDescriptor">resultDescriptor</option>
+		
+		<option value="//api/name/wasNull">wasNull</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/statementWithConnection:">+ statementWithConnection:</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/closeCursor">- closeCursor</option>
+		
+		<option value="//api/name/execDirect:">- execDirect:</option>
+		
+		<option value="//api/name/execute">- execute</option>
+		
+		<option value="//api/name/fetch">- fetch</option>
+		
+		<option value="//api/name/getDate:">- getDate:</option>
+		
+		<option value="//api/name/getDateByName:">- getDateByName:</option>
+		
+		<option value="//api/name/getDouble:">- getDouble:</option>
+		
+		<option value="//api/name/getDoubleByName:">- getDoubleByName:</option>
+		
+		<option value="//api/name/getLong:">- getLong:</option>
+		
+		<option value="//api/name/getLongByName:">- getLongByName:</option>
+		
+		<option value="//api/name/getObject:">- getObject:</option>
+		
+		<option value="//api/name/getObjectByName:">- getObjectByName:</option>
+		
+		<option value="//api/name/getString:">- getString:</option>
+		
+		<option value="//api/name/getStringByName:">- getStringByName:</option>
+		
+		<option value="//api/name/getTime:">- getTime:</option>
+		
+		<option value="//api/name/getTimeByName:">- getTimeByName:</option>
+		
+		<option value="//api/name/getTimestamp:">- getTimestamp:</option>
+		
+		<option value="//api/name/getTimestampByName:">- getTimestampByName:</option>
+		
+		<option value="//api/name/getUnsignedLong:">- getUnsignedLong:</option>
+		
+		<option value="//api/name/getUnsignedLongByName:">- getUnsignedLongByName:</option>
+		
+		<option value="//api/name/initWithConnection:">- initWithConnection:</option>
+		
+		<option value="//api/name/prepare:">- prepare:</option>
+		
+		<option value="//api/name/setDate:value:">- setDate:value:</option>
+		
+		<option value="//api/name/setDouble:value:">- setDouble:value:</option>
+		
+		<option value="//api/name/setLong:value:">- setLong:value:</option>
+		
+		<option value="//api/name/setObject:value:">- setObject:value:</option>
+		
+		<option value="//api/name/setString:value:">- setString:value:</option>
+		
+		<option value="//api/name/setTime:value:">- setTime:value:</option>
+		
+		<option value="//api/name/setTimestamp:value:">- setTimestamp:value:</option>
+		
+		<option value="//api/name/setUnsignedLong:value:">- setUnsignedLong:value:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">OdbcStatement Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>OdbcStatement.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/hstmt" title="hstmt"></a>
+	<h3 class="method-title"><code><a href="#//api/name/hstmt">&nbsp;&nbsp;hstmt</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (readonly) void *hstmt</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/connection" title="connection"></a>
+	<h3 class="method-title"><code><a href="#//api/name/connection">&nbsp;&nbsp;connection</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (weak, readonly) OdbcConnection *connection</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/wasNull" title="wasNull"></a>
+	<h3 class="method-title"><code><a href="#//api/name/wasNull">&nbsp;&nbsp;wasNull</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (readonly) bool wasNull</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/concurrency" title="concurrency"></a>
+	<h3 class="method-title"><code><a href="#//api/name/concurrency">&nbsp;&nbsp;concurrency</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic) unsigned long concurrency</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/resultDescriptor" title="resultDescriptor"></a>
+	<h3 class="method-title"><code><a href="#//api/name/resultDescriptor">&nbsp;&nbsp;resultDescriptor</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) OdbcResultDescriptor *resultDescriptor</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepareDescriptor" title="prepareDescriptor"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepareDescriptor">&nbsp;&nbsp;prepareDescriptor</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) OdbcPrepareDescriptor *prepareDescriptor</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/statementWithConnection:" title="statementWithConnection:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/statementWithConnection:">+&nbsp;statementWithConnection:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>+ (OdbcStatement *)statementWithConnection:(id)<em>newConnection</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/initWithConnection:" title="initWithConnection:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithConnection:">&ndash;&nbsp;initWithConnection:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (OdbcStatement *)initWithConnection:(id)<em>newConnection</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/execDirect:" title="execDirect:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/execDirect:">&ndash;&nbsp;execDirect:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)execDirect:(NSString *)<em>sql</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/fetch" title="fetch"></a>
+	<h3 class="method-title"><code><a href="#//api/name/fetch">&ndash;&nbsp;fetch</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)fetch</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/closeCursor" title="closeCursor"></a>
+	<h3 class="method-title"><code><a href="#//api/name/closeCursor">&ndash;&nbsp;closeCursor</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)closeCursor</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/prepare:" title="prepare:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/prepare:">&ndash;&nbsp;prepare:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)prepare:(NSString *)<em>sql</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/execute" title="execute"></a>
+	<h3 class="method-title"><code><a href="#//api/name/execute">&ndash;&nbsp;execute</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)execute</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getLong:" title="getLong:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getLong:">&ndash;&nbsp;getLong:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (long)getLong:(int)<em>columnNumber</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getLongByName:" title="getLongByName:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getLongByName:">&ndash;&nbsp;getLongByName:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (long)getLongByName:(NSString *)<em>columnName</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getUnsignedLong:" title="getUnsignedLong:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getUnsignedLong:">&ndash;&nbsp;getUnsignedLong:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (unsigned long)getUnsignedLong:(int)<em>columnNumber</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getUnsignedLongByName:" title="getUnsignedLongByName:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getUnsignedLongByName:">&ndash;&nbsp;getUnsignedLongByName:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (unsigned long)getUnsignedLongByName:(NSString *)<em>columnName</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getString:" title="getString:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getString:">&ndash;&nbsp;getString:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (NSString *)getString:(int)<em>columnNumber</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getStringByName:" title="getStringByName:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getStringByName:">&ndash;&nbsp;getStringByName:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (NSString *)getStringByName:(NSString *)<em>columnName</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getDouble:" title="getDouble:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getDouble:">&ndash;&nbsp;getDouble:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (double)getDouble:(int)<em>columnNumber</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getDoubleByName:" title="getDoubleByName:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getDoubleByName:">&ndash;&nbsp;getDoubleByName:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (double)getDoubleByName:(NSString *)<em>columnName</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getDate:" title="getDate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getDate:">&ndash;&nbsp;getDate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (NSDate *)getDate:(int)<em>columnNumber</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getDateByName:" title="getDateByName:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getDateByName:">&ndash;&nbsp;getDateByName:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (NSDate *)getDateByName:(NSString *)<em>columnName</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getTime:" title="getTime:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getTime:">&ndash;&nbsp;getTime:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (NSDate *)getTime:(int)<em>columnNumber</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getTimeByName:" title="getTimeByName:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getTimeByName:">&ndash;&nbsp;getTimeByName:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (NSDate *)getTimeByName:(NSString *)<em>columnName</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getTimestamp:" title="getTimestamp:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getTimestamp:">&ndash;&nbsp;getTimestamp:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (NSDate *)getTimestamp:(int)<em>columnNumber</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getTimestampByName:" title="getTimestampByName:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getTimestampByName:">&ndash;&nbsp;getTimestampByName:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (NSDate *)getTimestampByName:(NSString *)<em>columnName</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getObject:" title="getObject:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getObject:">&ndash;&nbsp;getObject:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (id)getObject:(int)<em>columnNumber</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getObjectByName:" title="getObjectByName:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getObjectByName:">&ndash;&nbsp;getObjectByName:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (id)getObjectByName:(NSString *)<em>columnName</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setLong:value:" title="setLong:value:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setLong:value:">&ndash;&nbsp;setLong:value:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)setLong:(int)<em>parameterNumber</em> value:(long)<em>value</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setUnsignedLong:value:" title="setUnsignedLong:value:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setUnsignedLong:value:">&ndash;&nbsp;setUnsignedLong:value:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)setUnsignedLong:(int)<em>parameterNumber</em> value:(unsigned long)<em>value</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setString:value:" title="setString:value:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setString:value:">&ndash;&nbsp;setString:value:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)setString:(int)<em>parameterNumber</em> value:(NSString *)<em>value</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setDouble:value:" title="setDouble:value:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setDouble:value:">&ndash;&nbsp;setDouble:value:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)setDouble:(int)<em>parameterNumber</em> value:(double)<em>value</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setDate:value:" title="setDate:value:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setDate:value:">&ndash;&nbsp;setDate:value:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)setDate:(int)<em>parameterNumber</em> value:(NSDate *)<em>value</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setObject:value:" title="setObject:value:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setObject:value:">&ndash;&nbsp;setObject:value:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)setObject:(int)<em>parameterNumber</em> value:(id)<em>value</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setTime:value:" title="setTime:value:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setTime:value:">&ndash;&nbsp;setTime:value:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)setTime:(int)<em>parameterNumber</em> value:(NSDate *)<em>value</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setTimestamp:value:" title="setTimestamp:value:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setTimestamp:value:">&ndash;&nbsp;setTimestamp:value:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)setTimestamp:(int)<em>parameterNumber</em> value:(NSDate *)<em>value</em></code></div>
+
+		    
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2025 Datakonsulten AB. All rights reserved. Updated: 2025-12-07</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

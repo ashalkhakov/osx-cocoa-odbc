@@ -11,9 +11,7 @@
 #import "OdbcColumnDescriptor.h"
 #import "OdbcException.h"
 
-#import <iODBC/sql.h>
-#import <iODBC/sqltypes.h>
-#import <iODBC/sqlext.h>
+#include <sql.h>
 
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
