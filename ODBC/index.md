@@ -1,4 +1,4 @@
-#Odbc framework documentation#
+# Odbc framework documentation
 
 Odbc framework is Cocoa framework providing access to ODBC databases. It works on
 top of UnixODBC framework which is a low level C-oriented framework of ODBC routines

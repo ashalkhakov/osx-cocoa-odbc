@@ -1,4 +1,4 @@
-#Odbc framework users guide#
+# Odbc framework users guide
 
 [API docs](https://ashalkhakov.github.io/osx-cocoa-odbc/)
 
@@ -23,7 +23,7 @@ The documentation consists of:
 * Class hierarchy page
 * Invidual pages for each class
 
-#Example console application#
+# Example console application
 
 The following is a simple Cocoa console (non-GUI) application that uses Odbc framework.
 
@@ -68,7 +68,7 @@ Then we create a new `OdbcStatement`. We use this statement to execute SQL query
 row each time around. We get `bookId`, `title` and `price`. Then we write the data 
 to the console. When the loop terminates we close the statement.
 
-#Prerequisites#
+# Prerequisites
 
 OS X version 11 or latter is requred. XCode vesion 26 or latter is also required.
 Futhermore, you need UnixODBC framework version 2.3.14 or latter. You also need a database
@@ -108,7 +108,7 @@ Now install this software either by using Git clone command or downloading zip-f
 If you downloaded zip-file then unpack it into a directory. Both ways result in Xcode
 project directory.
 
-#Building the software#
+# Building the software
 
 This repository contains XCode project with 6 targets:
 
@@ -136,7 +136,7 @@ window is shown:
 
 ![Example ODBC Application](docs/Images/OdbcExampleApplication.png)
 
-#Description Cocoa Core Data example#
+# Description Cocoa Core Data example
 
 The example shown above uses the following Core Data model:
 
@@ -204,7 +204,7 @@ the selected author. You can drag a book from 'Library Books' into 'Author Books
 add the book to the selected author. When running the application for the first
 time against a particular data source the tables will be empty.
 
-#Unit tests#
+# Unit tests
 
 Largely identical tests are run for each "backend". More drivers are possibly working, but are not tested.
 To change backend configuration, please edit the [config.plist](OdbcTests/config.plist):
@@ -217,7 +217,7 @@ Please ensure you've setup the databases you want to test with and you can conne
 The tests will create tables named `BOOK`, `AUTHOR`, `BOOKAUTHORS`, `COREDATAENTITY`,
 and `TESTTAB` in the data source.
 
-# Tasks to be performed #
+# Tasks to be performed
 
 In order to build, test and run this software you can follow the list below:
 
@@ -233,7 +233,7 @@ In order to build, test and run this software you can follow the list below:
 8. Use TextEdit to setup your ODBC connector and to create an ODBC data source in `~/.odbc.ini` (or in the system location)
 9. Now you shoud be able to run the unit tests and example application.
 
-# Creating new XCode project using Persistent Store for ODBC #
+# Creating new XCode project using Persistent Store for ODBC
 
 In this section I will guide you in creating a new XCode project using Persistent
 Store for ODBC. The section contains the following topics:
@@ -476,13 +476,13 @@ can add an author using + button.
 You can remove an author using - button. You can modify an author by double-clicking on it.
 Your changes will automatically be saved to the database when you quit the application.
 
-# Notes #
+# Notes
 
-### TestConnectApp ###
+### TestConnectApp
 
 Use the provided `TestConnectApp` application for basic connectivity testing.
 
-### IBM DB2 ###
+### IBM DB2
 
 The installation of DB2 on OS X is not what you expect on a Mac. It is more Unix
 oriented, no GUI, you work in a terminal window. It works if you follow instructions on
@@ -492,7 +492,7 @@ After installation you create a database using DB2 command.
 
 ODBC driver for DB2 and OS X is available from OpenLink.
 
-### Mimer SQL###
+### Mimer SQL
 
 Mimer SQL can be dowloaded from http://developer.mimer.com/downloads/index.htm.
 
@@ -500,7 +500,7 @@ ODBC driver and client tools are included in Mimer SQL for OS X.
 
 After installation you should create a databank using Mimer Batch SQL utility.
 
-### SQLite ###
+### SQLite
 
 Please install the ODBC driver via Homebrew:
 
@@ -517,7 +517,7 @@ Database    = /path/to/test.db
 Timeout     = 2000
 ```
 
-### MySQL ###
+### MySQL
 
 Please install the ODBC driver via Homebrew:
 
@@ -537,7 +537,7 @@ PWD         = odbctestpassword
 Port        = 3306
 ```
 
-### Oracle ###
+### Oracle
 
 Currently, Oracle is not avaiable on OS X. However, there is an Oracle ODBC driver for
 OS X available from OpenLink. You can use it and run with Oracle running on a server.
@@ -562,7 +562,7 @@ Username    = odbctestuser
 Password    = odbctestpassword
 ```
 
-### Microsoft SQL Server ###
+### Microsoft SQL Server
 
 Please install via Homebrew:
 
